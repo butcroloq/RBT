@@ -15,6 +15,13 @@
     .ghost-card {
       opacity: 0.4;
     }
+
+    @keyframes inspectPulse {0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.7);background:#b91c1c}50%{box-shadow:0 0 0 7px rgba(239,68,68,0);background:#ef4444}}
+    .inspect-alert{animation:inspectPulse 1.3s infinite;color:white!important;border:2px solid #fca5a5!important;font-weight:800!important;white-space:nowrap;flex-shrink:0;}
+    .inspect-done{background:#065f46!important;color:#d1fae5!important;border:2px solid #34d399!important;font-weight:800!important;white-space:nowrap;flex-shrink:0;}
+    .inspect-row{gap:12px;flex-wrap:wrap}
+    .inspect-row>span:first-child{flex:1 1 180px;min-width:0}
+    @media(prefers-reduced-motion:reduce){.inspect-alert{animation:none;background:#dc2626!important}}
   </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -191,23 +198,28 @@
           <div class="bg-slate-900 p-6 rounded-2xl border border-slate-700 flex flex-col items-center justify-center space-y-4 relative">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Litar & Mekanisme Kereta Ali</h4>
             
+            <div class="w-full max-w-md rounded-xl border-2 border-red-400 bg-red-950/50 p-4 text-center" id="inspectInstruction" role="status" aria-live="polite">
+              <p class="font-extrabold text-red-200 text-base">👆 LANGKAH 1: UJI KETIGA-TIGA KOMPONEN!</p>
+              <p class="text-sm text-white mt-1">Klik setiap butang <strong>🔍 UJI SEKARANG</strong> yang berkelip merah. Baca keputusan ujian sebelum menjawab.</p>
+              <p id="inspectProgress" class="mt-2 text-amber-200 font-bold">🔍 0/3 komponen telah diuji</p>
+            </div>
             <div class="w-full max-w-md bg-slate-800 p-4 rounded-xl border border-slate-600 space-y-3">
               <!-- Inspection point A -->
-              <button onclick="inspectPart('bateri')" class="w-full p-3 rounded-lg bg-slate-700/80 hover:bg-slate-700 border border-slate-600 text-left flex justify-between items-center transition group">
+              <button id="inspect-bateri" onclick="inspectPart('bateri')" class="inspect-row w-full p-3 rounded-lg bg-slate-700/80 hover:bg-slate-700 border border-slate-600 text-left flex justify-between items-center transition group">
                 <span class="text-sm font-medium text-slate-200">1. Bekalan Bateri 9V</span>
-                <span class="text-xs px-2 py-1 rounded bg-slate-800 text-slate-400 group-hover:text-amber-400">Uji Komponen 🔍</span>
+                <span class="inspect-alert text-xs px-3 py-2 rounded-lg">🔍 UJI SEKARANG</span>
               </button>
 
               <!-- Inspection point B -->
-              <button onclick="inspectPart('mikropengawal')" class="w-full p-3 rounded-lg bg-slate-700/80 hover:bg-slate-700 border border-slate-600 text-left flex justify-between items-center transition group">
+              <button id="inspect-mikropengawal" onclick="inspectPart('mikropengawal')" class="inspect-row w-full p-3 rounded-lg bg-slate-700/80 hover:bg-slate-700 border border-slate-600 text-left flex justify-between items-center transition group">
                 <span class="text-sm font-medium text-slate-200">2. Papan Mikropengawal & Litar Elektronik</span>
-                <span class="text-xs px-2 py-1 rounded bg-slate-800 text-slate-400 group-hover:text-amber-400">Uji Komponen 🔍</span>
+                <span class="inspect-alert text-xs px-3 py-2 rounded-lg">🔍 UJI SEKARANG</span>
               </button>
 
               <!-- Inspection point C -->
-              <button onclick="inspectPart('gear')" class="w-full p-3 rounded-lg bg-slate-700/80 hover:bg-slate-700 border border-slate-600 text-left flex justify-between items-center transition group">
+              <button id="inspect-gear" onclick="inspectPart('gear')" class="inspect-row w-full p-3 rounded-lg bg-slate-700/80 hover:bg-slate-700 border border-slate-600 text-left flex justify-between items-center transition group">
                 <span class="text-sm font-medium text-slate-200">3. Sambungan Gear Motor dengan Gandar Roda</span>
-                <span class="text-xs px-2 py-1 rounded bg-slate-800 text-slate-400 group-hover:text-amber-400">Uji Komponen 🔍</span>
+                <span class="inspect-alert text-xs px-3 py-2 rounded-lg">🔍 UJI SEKARANG</span>
               </button>
             </div>
 
@@ -221,7 +233,8 @@
           <div class="space-y-4">
             <h3 class="font-bold text-slate-200">Berdasarkan dapatan ujian di sebelah, apakah punca utama kerosakan ini?</h3>
             
-            <div class="space-y-3">
+            <p id="inspectAnswerNotice" class="text-sm text-amber-200 font-bold">🔒 Jawapan dibuka selepas 3 ujian selesai.</p>
+            <div id="inspectChoices" class="space-y-3 opacity-50">
               <label class="block p-4 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-slate-500 cursor-pointer transition">
                 <div class="flex items-center gap-3">
                   <input type="radio" name="troubleshoot" value="A" class="w-4 h-4 text-amber-500 accent-amber-500">
@@ -244,7 +257,7 @@
               </label>
             </div>
 
-            <button onclick="checkTroubleshoot()" class="w-full mt-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-amber-500/20 transition">
+            <button id="inspectSubmit" disabled onclick="checkTroubleshoot()" class="w-full mt-4 py-3 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-amber-500/20 transition">
               Hantar Jawapan Detektif
             </button>
 
@@ -561,7 +574,23 @@
     /* -------------------------------------------------------------------
        BAHAGIAN B: DETEKTIF RBT
     ------------------------------------------------------------------- */
+    const inspectedParts = new Set();
+    function refreshInspection(){
+      const total=inspectedParts.size;
+      const progress=document.getElementById('inspectProgress');
+      progress.textContent=total===3?'✅ 3/3 komponen telah diuji! Sila jawab soalan.':`🔍 ${total}/3 komponen telah diuji`;
+      const ready=total===3;
+      document.getElementById('inspectSubmit').disabled=!ready;
+      document.getElementById('inspectChoices').classList.toggle('opacity-50',!ready);
+      document.querySelectorAll('input[name="troubleshoot"]').forEach(el=>el.disabled=!ready);
+      document.getElementById('inspectAnswerNotice').textContent=ready?'✅ LANGKAH 2: Pilih punca kerosakan dan hantar jawapan.':'🔒 Jawapan dibuka selepas 3 ujian selesai.';
+      if(ready){document.getElementById('inspectInstruction').className='w-full max-w-md rounded-xl border-2 border-emerald-400 bg-emerald-950/40 p-4 text-center';}
+    }
     function inspectPart(part) {
+      inspectedParts.add(part);
+      const btn=document.getElementById('inspect-'+part);
+      if(btn){const chip=btn.querySelector('span:last-child');chip.className='inspect-done text-xs px-3 py-2 rounded-lg';chip.textContent='✓ TELAH DIUJI';}
+      refreshInspection();
       const box = document.getElementById('diagnosticBox');
       if (part === 'bateri') {
         box.className = "w-full p-4 rounded-xl bg-slate-900 border border-emerald-500/40 text-left text-xs text-emerald-300 space-y-1";
@@ -576,6 +605,7 @@
     }
 
     function checkTroubleshoot() {
+      if(inspectedParts.size!==3){alert('Sila uji ketiga-tiga komponen terlebih dahulu.');return;}
       const selected = document.querySelector('input[name="troubleshoot"]:checked');
       const feedback = document.getElementById('detektifFeedback');
       feedback.classList.remove('hidden');
@@ -894,5 +924,75 @@
       document.getElementById('welcomeName').focus();
     });
   </script>
+
+<!-- Popup keputusan dan navigasi mesra murid -->
+<div id="stepResultOverlay" class="hidden fixed inset-0 z-[120] bg-slate-950/85 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="stepResultTitle">
+  <div class="w-full max-w-md bg-slate-800 border border-cyan-500/40 rounded-3xl p-7 text-center shadow-2xl space-y-4">
+    <div id="stepResultIcon" class="text-6xl">🎉</div>
+    <h2 id="stepResultTitle" class="text-2xl font-extrabold text-white">Keputusan</h2>
+    <p id="stepResultMessage" class="text-slate-200 text-sm"></p>
+    <p id="stepResultInstruction" class="text-cyan-300 font-semibold"></p>
+    <button id="stepResultNext" type="button" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold py-4 px-4 rounded-xl text-base">Bahagian Seterusnya ➜</button>
+    <button id="stepResultStay" type="button" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-xl text-sm">Semak / Betulkan Jawapan</button>
+  </div>
+</div>
+<script>
+(function(){
+ const steps=[['elemen','tab-elemen','Bahagian A'],['detektif','tab-detektif','Bahagian B'],['kod','tab-kod','Bahagian C'],['bajet','tab-bajet','Bahagian D'],['subjektif','tab-subjektif','Bahagian E']];
+ const overlay=document.getElementById('stepResultOverlay');
+ const nextBtn=document.getElementById('stepResultNext');
+ const stayBtn=document.getElementById('stepResultStay');
+ let currentStep=0;
+ function sound(kind){
+   try{
+     const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+     const ctx=new AC();const t=ctx.currentTime;
+     if(kind==='applause'){
+       // Sorakan/aplaus ringkas disintesis secara tempatan tanpa fail audio luar.
+       for(let i=0;i<16;i++){
+         const length=.055, buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*length),ctx.sampleRate),data=buffer.getChannelData(0);
+         for(let j=0;j<data.length;j++)data[j]=(Math.random()*2-1)*(1-j/data.length);
+         const source=ctx.createBufferSource(),gain=ctx.createGain();source.buffer=buffer;gain.gain.value=.14;
+         source.connect(gain);gain.connect(ctx.destination);source.start(t+i*.055);
+       }
+     }else{
+       const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sawtooth';osc.frequency.setValueAtTime(190,t);osc.frequency.exponentialRampToValueAtTime(90,t+.45);
+       gain.gain.setValueAtTime(.15,t);gain.gain.exponentialRampToValueAtTime(.001,t+.48);osc.connect(gain);gain.connect(ctx.destination);osc.start(t);osc.stop(t+.5);
+     }
+     setTimeout(()=>ctx.close().catch(()=>{}),1700);
+   }catch(e){/* Pelayar mungkin menyekat audio */}
+ }
+ function showStep(i,good,detail){
+   currentStep=i;const last=i===steps.length-1;
+   document.getElementById('stepResultIcon').textContent=good?'🎉👏':'🔔';
+   document.getElementById('stepResultTitle').textContent=good?'Syabas! Jawapan tepat!':'Jawapan telah disemak';
+   document.getElementById('stepResultMessage').textContent=detail;
+   document.getElementById('stepResultInstruction').textContent=last?'Selesai Bahagian E. Lihat keputusan keseluruhan atau betulkan jawapan.':`Klik butang di bawah untuk ke ${steps[i+1][2]}.`;
+   nextBtn.textContent=last?'🏆 Lihat Keputusan Keseluruhan':`Teruskan ke ${steps[i+1][2]} ➜`;
+   overlay.classList.remove('hidden');sound(good?'applause':'buzzer');nextBtn.focus();
+ }
+ function wrap(name,i,valid,getGood,getDetail){
+   const original=window[name];if(typeof original!=='function')return;
+   window[name]=function(...args){
+     if(!valid()){alert('Sila lengkapkan jawapan sebelum menekan Semak Jawapan.');return;}
+     const result=original.apply(this,args);
+     showStep(i,getGood(),getDetail());return result;
+   };
+ }
+ wrap('checkElemenAnswers',0,()=>Object.values(userPlacements).filter(Boolean).length===initialComponents.length,()=>scores.elemen===100,()=>`Markah bahagian ini: ${scores.elemen}/100.`);
+ wrap('checkTroubleshoot',1,()=>inspectedParts.size===3 && !!document.querySelector('input[name="troubleshoot"]:checked'),()=>scores.detektif===100,()=>`Markah bahagian ini: ${scores.detektif}/100.`);
+ wrap('checkAlgorithm',2,()=>true,()=>scores.kod===100,()=>`Markah bahagian ini: ${scores.kod}/100.`);
+ wrap('checkBudgetQuiz',3,()=>document.getElementById('userBudgetAnswer').value.trim()!=='',()=>scores.bajet===100,()=>`Markah bahagian ini: ${scores.bajet}/100.`);
+ wrap('submitSubjective',4,()=>Array.from({length:7},(_,i)=>document.getElementById('sub'+(i+1)).value.trim()).every(Boolean),()=>subjectiveResults.every(r=>r.mark===2),()=>`Markah subjektif: ${subjectiveResults.reduce((a,r)=>a+r.mark,0)}/14. ${subjectiveResults.every(r=>r.mark===2)?'Semua tepat!':'Sila semak jawapan yang ditandakan.'}`);
+ nextBtn.addEventListener('click',()=>{
+   overlay.classList.add('hidden');
+   if(currentStep<steps.length-1){switchTab(steps[currentStep+1][1]);window.scrollTo({top:0,behavior:'smooth'});}
+   else{const summary=document.getElementById('summaryModal');summary.classList.remove('hidden');summary.scrollIntoView({behavior:'smooth',block:'start'});}
+ });
+ stayBtn.addEventListener('click',()=>{overlay.classList.add('hidden');});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.classList.contains('hidden'))overlay.classList.add('hidden');});
+})();
+</script>
+
 </body>
 </html>
