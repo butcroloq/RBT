@@ -403,6 +403,19 @@
 
   </main>
 
+
+<!-- Statistik lawatan dan kuiz lengkap (memerlukan Google Apps Script) -->
+<section class="max-w-6xl mx-auto px-4 pb-5 w-full" aria-label="Statistik kuiz">
+ <div class="rounded-2xl bg-slate-800/80 border border-slate-700 p-4 text-center">
+  <h2 class="font-bold text-slate-100 mb-3">📊 Statistik Kuiz RBT Tahun 6</h2>
+  <div class="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+   <div class="rounded-xl bg-slate-900 p-3"><p class="text-xs text-slate-400">👀 Jumlah Lawatan</p><p id="visitorCount" class="text-2xl font-extrabold text-cyan-300">—</p></div>
+   <div class="rounded-xl bg-slate-900 p-3"><p class="text-xs text-slate-400">🏆 Kuiz Disiapkan</p><p id="completionCount" class="text-2xl font-extrabold text-emerald-300">—</p></div>
+  </div>
+  <p id="counterStatus" class="text-xs text-slate-400 mt-3">Statistik akan aktif selepas pautan Google Apps Script ditetapkan.</p>
+ </div>
+</section>
+
   <footer class="bg-slate-950 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
     <p>© Modul Interaktif RBT Tahun 6 — Reka Bentuk & Teknologi Elektromekanikal</p>
   </footer>
@@ -980,6 +993,51 @@
  });
  stayBtn.addEventListener('click',()=>{overlay.classList.add('hidden');});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.classList.contains('hidden'))overlay.classList.add('hidden');});
+})();
+</script>
+
+
+<script>
+/* Tampal URL Web App Apps Script berakhir /exec di sini. */
+const RBT_COUNTER_URL = 'PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+(function(){
+ const ready=()=>/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(RBT_COUNTER_URL);
+ const status=document.getElementById('counterStatus');
+ if(!ready()){status.textContent='⚙️ Kaunter belum disambungkan. Guru perlu tetapkan URL Apps Script.';return;}
+ const sidKey='rbt6_counter_sid_v1', visitKey='rbt6_counter_visited_v1',doneKey='rbt6_counter_done_v1';
+ let sid=sessionStorage.getItem(sidKey);
+ if(!sid){sid=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2));sessionStorage.setItem(sidKey,sid);}
+ let req=0;
+ function refresh(){
+   const cb='rbtCounterCallback_'+(++req);
+   const tag=document.createElement('script');
+   const timer=setTimeout(()=>{cleanup();status.textContent='Statistik tidak dapat dimuatkan. Cuba muat semula.';},9000);
+   function cleanup(){clearTimeout(timer);delete window[cb];tag.remove();}
+   window[cb]=data=>{cleanup();if(data&&data.ok){document.getElementById('visitorCount').textContent=Number(data.visits).toLocaleString('ms-MY');document.getElementById('completionCount').textContent=Number(data.completed).toLocaleString('ms-MY');status.textContent='Dikemas kini daripada rekod dalam talian.';}else status.textContent='Statistik belum tersedia.';};
+   tag.onerror=()=>{cleanup();status.textContent='Tidak dapat menyambung ke kaunter.';};
+   tag.src=RBT_COUNTER_URL+'?action=stats&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+   document.head.appendChild(tag);
+ }
+ function event(kind){
+   // Permintaan ringkas tanpa data peribadi; Google Apps Script membalas imej kosong.
+   const img=new Image();
+   img.src=RBT_COUNTER_URL+'?action='+encodeURIComponent(kind)+'&sid='+encodeURIComponent(sid)+'&_='+Date.now();
+   setTimeout(refresh,1600);
+ }
+ if(!sessionStorage.getItem(visitKey)){sessionStorage.setItem(visitKey,'1');event('visit');}
+ else refresh();
+ const observer=new MutationObserver(()=>{
+   const complete=typeof allDone==='function' && allDone();
+   if(complete&&!sessionStorage.getItem(doneKey)){
+     sessionStorage.setItem(doneKey,'1');event('complete');
+   }
+ });
+ const summary=document.getElementById('summaryModal');
+ if(summary)observer.observe(summary,{attributes:true,attributeFilter:['class']});
+ // Pemeriksaan tambahan apabila murid selesai bahagian E.
+ const original=window.submitSubjective;
+ if(typeof original==='function')window.submitSubjective=function(...args){const ret=original.apply(this,args);queueMicrotask(()=>{if(typeof allDone==='function'&&allDone()&&!sessionStorage.getItem(doneKey)){sessionStorage.setItem(doneKey,'1');event('complete');}});return ret;};
+ setInterval(refresh,60000);
 })();
 </script>
 
