@@ -19,6 +19,18 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
+<div id="welcomeGate" class="fixed inset-0 z-[100] bg-slate-950/95 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+  <div class="w-full max-w-md bg-slate-800 border border-cyan-500/50 rounded-2xl p-7 shadow-2xl space-y-4">
+    <div class="text-4xl text-center">👋📚</div><h2 id="welcomeTitle" class="text-2xl font-extrabold text-center text-cyan-300">Selamat Datang!</h2>
+    <p class="text-sm text-slate-300 text-center">Sila isi nama penuh dan kelas, kemudian tekan <b>Simpan & Mula Kuiz</b>.</p>
+    <label class="block text-sm font-bold">Nama penuh murid<input id="welcomeName" autocomplete="name" class="mt-2 w-full p-3 rounded-lg bg-slate-900 border border-slate-600 text-white" placeholder="Contoh: Nur Aisyah binti Ahmad"></label>
+    <label class="block text-sm font-bold">Kelas<input id="welcomeClass" class="mt-2 w-full p-3 rounded-lg bg-slate-900 border border-slate-600 text-white" placeholder="Contoh: 6 Bestari"></label>
+    <p id="welcomeError" class="text-rose-300 text-sm" role="alert"></p>
+    <button onclick="startQuiz()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl py-3">💾 Simpan & Mula Kuiz</button>
+  </div>
+</div>
+<div id="greetingBanner" class="hidden max-w-6xl mx-auto w-full px-4 pt-4"><div class="rounded-xl border border-cyan-500/30 bg-cyan-950/40 p-3 text-cyan-200 font-semibold" id="greetingText"></div></div>
+
   <!-- Header / Navigation -->
   <header class="bg-slate-800/80 backdrop-blur border-b border-slate-700 sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -348,16 +360,28 @@
       </div>
     </section>
 
-<section id="tab-subjektif" class="tab-content hidden space-y-5"><div class="bg-slate-800/70 border border-slate-700 rounded-2xl p-6"><h2 class="text-xl font-bold mb-2">✍️ Bahagian E: Soalan Subjektif</h2><p class="text-sm text-slate-300 mb-5">Jawab semua 7 soalan menggunakan ayat sendiri. Jawapan disimpan secara automatik pada peranti ini. Guru boleh menyemak jawapan menggunakan fail yang dieksport.</p><div class="space-y-4"><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub1" class="block font-semibold text-sm mb-2">1. Nyatakan dua contoh komponen elektrik yang digunakan dalam projek elektromekanikal.</label><textarea id="sub1" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub2" class="block font-semibold text-sm mb-2">2. Terangkan fungsi gear dalam sistem mekanikal kereta mainan.</label><textarea id="sub2" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub3" class="block font-semibold text-sm mb-2">3. Motor kereta mainan berputar tetapi roda tidak bergerak. Cadangkan satu langkah pembaikan.</label><textarea id="sub3" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub4" class="block font-semibold text-sm mb-2">4. Apakah fungsi sensor dalam sistem pengairan tanaman automatik?</label><textarea id="sub4" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub5" class="block font-semibold text-sm mb-2">5. Mengapakah urutan arahan yang betul penting dalam pengaturcaraan?</label><textarea id="sub5" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub6" class="block font-semibold text-sm mb-2">6. Jumlah kos komponen projek ialah RM22 dan bajet RM30. Hitung baki wang dan tunjukkan pengiraan.</label><textarea id="sub6" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub7" class="block font-semibold text-sm mb-2">7. Nyatakan dua langkah keselamatan semasa memasang litar elektrik projek.</label><textarea id="sub7" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div></div><div class="flex flex-wrap gap-3 mt-5"><button onclick="submitSubjective()" class="bg-cyan-500 text-slate-950 px-5 py-3 rounded-xl font-bold">Hantar Jawapan Subjektif</button><button onclick="exportAnswers()" class="bg-slate-700 px-5 py-3 rounded-xl font-bold">Muat Turun Jawapan (.txt)</button></div><p id="subjectiveFeedback" class="mt-3 text-sm text-cyan-300"></p></div></section>
+<section id="tab-subjektif" class="tab-content hidden space-y-5"><div class="bg-slate-800/70 border border-slate-700 rounded-2xl p-6"><h2 class="text-xl font-bold mb-2">✍️ Bahagian E: Soalan Subjektif</h2><p class="text-sm text-slate-300 mb-5">Jawab semua 7 soalan dengan istilah atau nilai yang tepat. Setiap soalan mempunyai jawapan khusus dan disemak secara automatik (2 markah setiap satu).</p><div class="space-y-4"><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub1" class="block font-semibold text-sm mb-2">1. Apakah nama komponen yang digunakan untuk membuka dan menutup litar elektrik?</label><textarea id="sub1" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub2" class="block font-semibold text-sm mb-2">2. Apakah nama komponen mekanikal bergigi yang memindahkan putaran antara aci?</label><textarea id="sub2" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub3" class="block font-semibold text-sm mb-2">3. Motor kereta mainan berputar tetapi gear tercabut daripada gandar. Komponen apakah yang perlu dipasang semula?</label><textarea id="sub3" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub4" class="block font-semibold text-sm mb-2">4. Apakah nama komponen yang mengesan kelembapan tanah dalam sistem pengairan automatik?</label><textarea id="sub4" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub5" class="block font-semibold text-sm mb-2">5. Apakah istilah bagi langkah-langkah arahan yang disusun secara tertib untuk menyelesaikan masalah?</label><textarea id="sub5" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub6" class="block font-semibold text-sm mb-2">6. Bajet projek ialah RM30 dan jumlah kos RM22. Berapakah baki bajet dalam RM?</label><textarea id="sub6" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div><div class="p-4 bg-slate-900/70 border border-slate-700 rounded-xl"><label for="sub7" class="block font-semibold text-sm mb-2">7. Apakah nama keadaan apabila arus elektrik mengalir melalui laluan yang tidak sepatutnya dengan rintangan sangat rendah?</label><textarea id="sub7" rows="3" oninput="saveSubjective()" placeholder="Taip jawapan kamu di sini..." class="w-full rounded-lg p-3 bg-slate-950 border border-slate-600 text-white text-sm focus:border-cyan-400 outline-none"></textarea></div></div><div class="flex flex-wrap gap-3 mt-5"><button onclick="submitSubjective()" class="bg-cyan-500 text-slate-950 px-5 py-3 rounded-xl font-bold">Semak Automatik Subjektif</button><button onclick="exportAnswers()" class="bg-slate-700 px-5 py-3 rounded-xl font-bold">Muat Turun Jawapan (.txt)</button></div><p id="subjectiveFeedback" class="mt-3 text-sm text-cyan-300"></p></div></section>
     <!-- Final Result Modal / Summary Card -->
     <section id="summaryModal" class="hidden bg-slate-800/90 border border-indigo-500/50 rounded-2xl p-8 text-center space-y-4">
       <div class="text-5xl">🏆</div>
       <h2 class="text-2xl font-bold text-white">Keputusan Bahagian A–D</h2>
       <p class="text-slate-300 text-sm max-w-md mx-auto">
-        Markah sementara daripada 80% komponen interaktif. Baki 20% untuk jawapan subjektif perlu disemak oleh guru.
+        Markah termasuk semakan automatik subjektif berdasarkan jawapan khusus.
       </p>
       <div id="finalScoreText" class="text-3xl font-extrabold text-emerald-400">
-        400 / 100 Mata
+        0% (sementara)
+      </div>
+      <div id="sharePanel" class="hidden text-left bg-slate-900/80 border border-cyan-500/40 rounded-xl p-5 space-y-3">
+        <h3 class="font-bold text-cyan-300">📤 Kongsi Jawapan kepada Guru</h3>
+        <p id="shareIdentity" class="text-sm text-cyan-200"></p>
+        <input type="hidden" id="studentName"><input type="hidden" id="studentClass">
+        <div class="flex flex-wrap gap-2">
+          <button onclick="shareEmail()" class="bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-3 font-bold text-sm">✉️ E-mel Guru</button>
+          <button onclick="shareClassroom()" class="bg-green-600 hover:bg-green-700 rounded-lg px-4 py-3 font-bold text-sm">🏫 Google Classroom</button>
+          <button onclick="shareNative()" class="bg-indigo-600 hover:bg-indigo-700 rounded-lg px-4 py-3 font-bold text-sm">📱 Kongsi Fail</button>
+          <button onclick="exportAnswers()" class="bg-slate-700 hover:bg-slate-600 rounded-lg px-4 py-3 font-bold text-sm">⬇️ Muat Turun Jawapan</button>
+        </div>
+        <p id="shareFeedback" class="text-xs text-slate-300">Google Classroom memerlukan murid melampirkan fail jawapan pada tugasan kelas. E-mel akan dibuka dengan teks jawapan untuk dihantar.</p>
       </div>
       <button onclick="location.reload()" class="px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm rounded-xl shadow-lg transition">
         Cuba Lagi 🔄
@@ -419,16 +443,18 @@
       } catch(e) {}
     }
 
-    // Markah A-D = 80%; Bahagian E = 20% selepas disemak guru.
+    // A-D menyumbang 80%, E menyumbang 20%.
+    let subjectiveReviewed=false;
+    let subjectivePending=[];
     function updateScoreDisplay() {
       const objektif = scores.elemen + scores.detektif + scores.kod + scores.bajet;
-      const percent = Math.round(objektif * 0.2);
+      const percent = Math.round(objektif * 0.2 + scores.subjektif * 0.2);
       document.getElementById('scoreDisplay').innerText = percent + ' / 100';
       document.getElementById('progressDisplay').innerText = percent + '%';
-      document.getElementById('finalScoreText').innerText = percent + '% (sementara)';
-      // Subjektif belum diberikan markah secara automatik.
-      const completed = ['elemen','detektif','kod','bajet'].every(k => attempted[k]);
-      if (completed) document.getElementById('summaryModal').classList.remove('hidden');
+      document.getElementById('finalScoreText').innerText = percent + '%'+(subjectivePending.length?' (sementara — semakan guru)':'');
+      const completed = ['elemen','detektif','kod','bajet'].every(k => attempted[k]) && subjectiveReviewed;
+      document.getElementById('summaryModal').classList.toggle('hidden',!completed);
+      updateShareAvailability();
     }
     const attempted = {elemen:false,detektif:false,kod:false,bajet:false};
 
@@ -753,18 +779,108 @@
     function saveSubjective() {
       const values = Array.from({length:subjectiveCount},(_,i)=>document.getElementById('sub'+(i+1)).value);
       try { localStorage.setItem('rbt6_subjective',JSON.stringify(values)); } catch(e) {}
+      subjectiveReviewed=false;
+      updateShareAvailability();
     }
-    function submitSubjective() {
+    // Jawapan khusus sahaja: normalisasi ejaan, huruf besar/kecil dan tanda baca.
+    const normal = x => String(x).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9.\s]/g,' ').replace(/\s+/g,' ').trim();
+    const specificKeys = {
+      1: ['suis','suis elektrik','suis utama'],
+      2: ['gear','roda gear','roda bergigi'],
+      3: ['gear','gear motor','roda gear'],
+      4: ['sensor kelembapan tanah','sensor kelembapan','penderia kelembapan tanah','penderia kelembapan'],
+      5: ['algoritma'],
+      6: ['8','8.00','rm8','rm 8','rm8.00','rm 8.00','8 ringgit','lapan ringgit'],
+      7: ['litar pintas']
+    };
+    function assess(i,raw){
+      const t=normal(raw);
+      if(!t) return {mark:0,status:'Belum dijawab',note:'Sila isi jawapan.'};
+      const accepted=specificKeys[i].some(v=>normal(v)===t);
+      return accepted ? {mark:2,status:'Diterima automatik',note:'Jawapan tepat.'} :
+        {mark:0,status:'Tidak tepat',note:'Jawapan tidak sepadan dengan skema khusus.'};
+    }
+    let subjectiveResults=[];
+    function submitSubjective(){
       saveSubjective();
-      const filled = Array.from({length:subjectiveCount},(_,i)=>document.getElementById('sub'+(i+1)).value.trim()).filter(Boolean).length;
-      document.getElementById('subjectiveFeedback').textContent = filled===subjectiveCount ? '✅ Semua jawapan disimpan pada peranti ini. Muat turun fail untuk dihantar kepada guru.' : `⚠️ ${filled}/${subjectiveCount} jawapan diisi. Lengkapkan semua soalan sebelum menghantar.`;
+      subjectiveResults=Array.from({length:subjectiveCount},(_,i)=>assess(i+1,document.getElementById('sub'+(i+1)).value));
+      subjectivePending=[];
+      const total=subjectiveResults.reduce((n,r)=>n+r.mark,0);
+      scores.subjektif=Math.round(total/14*100);
+      subjectiveReviewed=true;
+      document.querySelectorAll('[id^="sub"]').forEach(el=>{if(/^sub[1-7]$/.test(el.id)){const i=Number(el.id.slice(3))-1;const r=subjectiveResults[i];let msg=el.parentElement.querySelector('.auto-mark');if(!msg){msg=document.createElement('p');msg.className='auto-mark text-xs mt-2';el.parentElement.appendChild(msg);}msg.textContent=`${r.mark}/2 markah — ${r.status}. ${r.note}`;msg.classList.toggle('text-amber-300',r.status!=='Diterima automatik');msg.classList.toggle('text-emerald-300',r.status==='Diterima automatik');}});
+      document.getElementById('subjectiveFeedback').textContent=`Semakan automatik: ${total}/14 mata (${Math.round(total/14*20)} daripada 20%). ${subjectivePending.length? 'Soalan '+subjectivePending.join(', ')+' ditandakan untuk semakan guru.':'Semua jawapan diterima automatik.'}`;
+      updateScoreDisplay();
     }
     function exportAnswers() {
+      if(!document.getElementById('studentName').value.trim()){alert('Sila isi nama dahulu.');return;}
       saveSubjective();
-      const lines=['JAWAPAN SUBJEKTIF RBT TAHUN 6','Nama murid: __________________','Kelas: __________________',''];
+      const lines=['JAWAPAN KUIZ RBT TAHUN 6','Nama murid: '+(document.getElementById('studentName').value.trim()||'(tidak diisi)'),'Kelas: '+(document.getElementById('studentClass').value.trim()||'(tidak diisi)'),'Markah keseluruhan automatik: '+document.getElementById('scoreDisplay').innerText,'Soalan perlu semakan guru: '+(subjectivePending.join(', ')||'Tiada'),'', 'BAHAGIAN E - JAWAPAN SUBJEKTIF',''];
       for(let i=1;i<=subjectiveCount;i++) lines.push('Soalan '+i+':',document.getElementById('sub'+i).value.trim() || '(Belum dijawab)','');
       const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
       const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='jawapan_subjektif_rbt6.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }
+
+
+
+    function startQuiz(){
+      const name=document.getElementById('welcomeName').value.trim().replace(/\s+/g,' ');
+      const cls=document.getElementById('welcomeClass').value.trim().replace(/\s+/g,' ');
+      if(name.length<3||!cls){document.getElementById('welcomeError').textContent='⚠️ Sila isi nama penuh dan kelas sebelum mula.';return;}
+      document.getElementById('studentName').value=name;
+      document.getElementById('studentClass').value=cls;
+      saveIdentity();
+      document.getElementById('welcomeGate').classList.add('hidden');
+      document.getElementById('greetingBanner').classList.remove('hidden');
+      document.getElementById('greetingText').textContent='👋 Hai, '+name+'! Selamat menjawab Kuiz RBT Tahun 6. Semoga berjaya!';
+      document.getElementById('shareIdentity').textContent='Murid: '+name+' | Kelas: '+cls;
+    }
+
+    function saveIdentity(){
+      try {localStorage.setItem('rbt6_identity',JSON.stringify([document.getElementById('studentName').value,document.getElementById('studentClass').value]));}catch(e){}
+    }
+    function allDone(){return subjectiveReviewed && ['elemen','detektif','kod','bajet'].every(k=>attempted[k]) && Array.from({length:subjectiveCount},(_,i)=>document.getElementById('sub'+(i+1)).value.trim()).every(Boolean);}
+    function updateShareAvailability(){
+      const panel=document.getElementById('sharePanel');
+      if(panel)panel.classList.toggle('hidden',!allDone());
+      if(allDone())document.getElementById('summaryModal').classList.remove('hidden');
+    }
+    function reportText(){
+      const name=document.getElementById('studentName').value.trim(),cls=document.getElementById('studentClass').value.trim();
+      if(!name||!cls){document.getElementById('shareFeedback').textContent='⚠️ Isi nama penuh dan kelas dahulu.';return null;}
+      const lines=['KUIZ INTERAKTIF RBT TAHUN 6','Nama: '+name,'Kelas: '+cls,'Markah automatik keseluruhan: '+document.getElementById('scoreDisplay').innerText,'Soalan perlu semakan guru: '+(subjectivePending.join(', ')||'Tiada'),''];
+      for(let i=1;i<=subjectiveCount;i++){
+        const label=document.querySelector('label[for="sub'+i+'"]');
+        lines.push(label?label.textContent.trim():'Soalan '+i,document.getElementById('sub'+i).value.trim(),subjectiveResults[i-1] ? 'Semakan: '+subjectiveResults[i-1].mark+'/2 ('+subjectiveResults[i-1].status+')':'Belum disemak','');
+      }
+      return lines.join('\n');
+    }
+    function shareEmail(){
+      if(!allDone())return;
+      const report=reportText();if(!report)return;
+      const name=document.getElementById('studentName').value.trim();
+      const subject=encodeURIComponent('Jawapan Kuiz RBT Tahun 6 - '+name);
+      const body=encodeURIComponent(report);
+      // mailto mempunyai had panjang berbeza mengikut aplikasi e-mel.
+      if(body.length>14000){exportAnswers();document.getElementById('shareFeedback').textContent='Fail jawapan dimuat turun. Lampirkan fail itu dalam e-mel kepada guru.';window.location.href='mailto:?subject='+subject;return;}
+      window.location.href='mailto:?subject='+subject+'&body='+body;
+    }
+    function shareClassroom(){
+      if(!allDone())return;
+      if(!reportText())return;
+      exportAnswers();
+      document.getElementById('shareFeedback').textContent='✅ Fail jawapan telah dimuat turun. Buka tugasan RBT dalam Google Classroom, pilih Tambah atau buat → Fail, lampirkan fail TXT dan klik Serahkan. Membuka Classroom…';
+      window.open('https://classroom.google.com/','_blank','noopener,noreferrer');
+    }
+    async function shareNative(){
+      if(!allDone())return;
+      const report=reportText();if(!report)return;
+      const file=new File([report], 'jawapan_rbt_tahun6.txt',{type:'text/plain'});
+      try{
+        if(navigator.canShare && navigator.canShare({files:[file]}))await navigator.share({title:'Jawapan Kuiz RBT Tahun 6',files:[file]});
+        else if(navigator.share)await navigator.share({title:'Jawapan Kuiz RBT Tahun 6',text:report});
+        else {exportAnswers();document.getElementById('shareFeedback').textContent='Peranti ini tidak menyokong kongsi terus. Fail jawapan telah dimuat turun untuk dilampirkan.';}
+      }catch(e){if(e.name!=='AbortError')document.getElementById('shareFeedback').textContent='Perkongsian tidak berjaya. Cuba Muat Turun Jawapan.';}
     }
 
     // INITIALIZATION
@@ -773,7 +889,9 @@
       renderElemen();
       renderAlgorithm();
       renderBudgetItems();
+      try {const id=JSON.parse(localStorage.getItem('rbt6_identity')||'[]');document.getElementById('studentName').value=id[0]||'';document.getElementById('studentClass').value=id[1]||'';document.getElementById('welcomeName').value=id[0]||'';document.getElementById('welcomeClass').value=id[1]||'';}catch(e){}
       updateScoreDisplay();
+      document.getElementById('welcomeName').focus();
     });
   </script>
 </body>
